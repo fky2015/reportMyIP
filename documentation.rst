@@ -14,7 +14,8 @@ rest api 设计
 1     GET       /hosts            得到所有ip
 2     GET       /host/{hostname}  得到hostname所在字段
 3     POST      /host             提交信息
-4     DELETE    /host/{hostname}/{}
+4     DELETE    /host/{hostname}  删除hostname的数据
+5     DELETE    /hosts            删除所有数据
 ====  ========  ================  ====================
 
 

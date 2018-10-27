@@ -1,9 +1,17 @@
 from flask import Flask, request
 import json
 import dbio
-from pprint import pprint
 import time
+import os
+import requests
+
 app = Flask(__name__)
+
+config = {}
+if os.path.exists('config.json'):
+    try:
+        with open('config.json') as f:
+            config = json.load(f)
 
 
 def wrap_list(ls: list)->dict:
@@ -34,7 +42,7 @@ def del_host(hostname):
     return json.dumps({"status": "success"})
 
 
-@app.route('/hosts', method=['DELETE'])
+@app.route('/hosts', methods=['DELETE'])
 def del_hosts():
     try:
         dbio.delAll()
@@ -67,6 +75,19 @@ def update_host():
         dbio.update(hostname, uid, ip, status, updateTime, info)
     else:
         dbio.add(hostname, uid, ip, status, updateTime, info)
+
+    # send to upstream servers
+    if 'upstream_servers' in config and isinstance(config['upstream_servers'], list):
+        data = dict(hostname=hostname, ip=ip, uid=uid, info=info)
+        for server_url in config['upstream_servers']:
+            try:
+                response = requests.post(
+                    server_url+'/host', data=data, timeout=2)
+            except requests.exceptions.Timeout as e:
+                print('upstream['+server_url+'] '+'TIMEOUT')
+            else:
+                print('upstream['+server_url+'] '+response.text)
+                
     return json.dumps({'status': "success"})
 
 
