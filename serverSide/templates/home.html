@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>This is the home page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <h1>this is the home page</h1>
+    <div>
+        <h2>hello world</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore error dignissimos iure quidem, cum, sunt
+            libero sint, placeat provident delectus alias. Libero reprehenderit nihil qui magnam alias, molestias
+            pariatur cum.</p>
+    </div>
+    {% for post in posts %}
+    <h1>{{ post.title }}</h1>
+    <p>by {{ post.author }} on {{post.date_posted}}</p>
+    <p>{{ post.content }}</p>
+    {% endfor%}
+</body>
+
+</html>
