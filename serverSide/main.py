@@ -12,6 +12,8 @@ if os.path.exists('config.json'):
     try:
         with open('config.json') as f:
             config = json.load(f)
+    finally:
+        pass
 
 
 def wrap_list(ls: list)->dict:

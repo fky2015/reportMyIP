@@ -1,9 +1,10 @@
 import requests
 import os
 import json
+import socket
 
 
-hostname = os.popen('hostname').read().replace('\n', '')
+hostname = socket.gethostname()
 with open("config.json") as f:
     obj = json.load(f)
     uid = obj['uid'] or "0"
@@ -18,7 +19,8 @@ info = os.popen('ip addr show | grep global').read().replace('\n', '')
 data = dict(hostname=hostname, ip=ip, info=info, uid=uid)
 
 try:
+    print('POST data to server', serverURL)
     response = requests.post(serverURL+'/host', data=data, timeout=5)
+    print(response.text)
 except requests.exceptions.Timeout as e:
-    print("TIME OUT, server may not open")
-print(response.text)
+    print("TIMEOUT, server may not open")
